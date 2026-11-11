@@ -1,0 +1,183 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Japanese Grammar Quiz</title>
+<style>
+:root{--bg:#fbfaf7;--cd:#fff;--tx:#1f2430;--mu:#6b7280;--ac:#c2410c;--bd:#e3dfd6;--ok:#15803d;--okb:#dcfce7;--no:#b91c1c;--nob:#fee2e2;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15171c;--cd:#1e2128;--tx:#eceef2;--mu:#9aa3b2;--ac:#fb923c;--bd:#33373f;--ok:#4ade80;--okb:#14351f;--no:#f87171;--nob:#3b1515;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15171c;--cd:#1e2128;--tx:#eceef2;--mu:#9aa3b2;--ac:#fb923c;--bd:#33373f;--ok:#4ade80;--okb:#14351f;--no:#f87171;--nob:#3b1515;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);border-bottom:1px solid var(--bd);padding:10px 16px;z-index:9}
+h1{font-size:1.15rem;margin:0 0 6px}nav{display:flex;gap:6px;flex-wrap:wrap}
+nav button{border:1px solid var(--bd);background:var(--cd);color:var(--tx);border-radius:999px;padding:6px 12px;font:inherit;font-size:.85rem;cursor:pointer}
+nav button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+#sc{font-size:.8rem;color:var(--mu);margin-top:6px}
+main{max-width:820px;margin:0 auto;padding:16px}
+h2{font-size:1.1rem;margin:22px 0 4px}.ins{color:var(--mu);margin:0 0 10px;font-size:.92rem}
+.card{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:14px;margin:10px 0}
+.opt{display:block;width:100%;text-align:left;margin:6px 0 0;padding:9px 12px;border:1px solid var(--bd);border-radius:8px;background:transparent;color:var(--tx);font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ac)}.opt:disabled{cursor:default;opacity:1}
+.ok{background:var(--okb)!important;border-color:var(--ok)!important}.no{background:var(--nob)!important;border-color:var(--no)!important}
+.fb{margin-top:8px;font-size:.9rem}.fb.g{color:var(--ok)}.fb.b{color:var(--no)}
+input{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:5px 8px;width:9.5em;max-width:100%;box-sizing:border-box}
+td input{width:100%;min-width:9em}input.ok{border-color:var(--ok)}input.no{border-color:var(--no)}
+.go,.rs{font:inherit;font-size:.9rem;border-radius:8px;padding:6px 14px;cursor:pointer;margin:8px 8px 0 0}
+.go{background:var(--ac);color:#fff;border:0}.rs{background:transparent;color:var(--tx);border:1px solid var(--bd)}
+.w{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:760px}th,td{border:1px solid var(--bd);padding:6px;font-size:.88rem;vertical-align:top}th{background:var(--cd)}
+td small{display:block;color:var(--no);font-size:.75rem;margin-top:2px}
+.cn{margin:6px 0 0;color:var(--mu)}.cn b{color:var(--tx)}.fb b.g{color:var(--ok)}.fb b.b{color:var(--no)}.rv{margin:10px 0 0}.rv small{color:var(--mu);font-size:.78rem}.rv b{color:var(--ac)}.rv span{color:var(--mu)}
+</style></head><body>
+<header><h1>Japanese Grammar Quiz</h1><nav><button data-p="1">Part 1 · Multiple choice</button><button data-p="2">Part 2 · Identification</button><button data-p="3">Part 3 · Final quiz</button><button data-p="4">Part 4 · Reviewer</button></nav><div id="sc"></div></header>
+<main><section id="p1"></section><section id="p2" hidden></section><section id="p3" hidden></section><section id="p4" hidden></section></main>
+<script>
+const $=s=>document.querySelector(s),norm=s=>s.toLowerCase().replace(/[\s.,。、~～()（）]/g,''),
+shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]),
+got={1:new Set,2:new Set,3:new Set},tot={1:0,2:0,3:0};
+function sc(){$('#sc').textContent=[1,2,3].map(p=>'Part '+p+': '+got[p].size+'/'+tot[p]).join('  ·  ')}
+function show(p){[1,2,3,4].forEach(i=>{$('#p'+i).hidden=i!=p});document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p==p));scrollTo(0,0)}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.p));
+const C={
+ia:'~i adjective: a describing word that ends in -i. It states the state of a noun and conjugates by changing its ending (-i → -kunai, -katta, -kunakatta).',
+na:'~na adjective: a describing word that takes na before a noun. Before desu/deshita the na is dropped and the adjective never changes; the ending (desu, dewa arimasen, deshita, dewa arimasendeshita) shows the form.',
+mod:'Modifying a noun: an adjective placed right before a noun describes it. ~i adjectives stay unchanged; ~na adjectives keep their na.',
+voc:'Vocabulary: learn each adjective with its meaning and type (~i or ~na), because the type decides how it conjugates.',
+ne:'Particles mark a word’s role: wa marks the topic, no links nouns (“’s / of”), and ne at the end of a sentence seeks the listener’s agreement.',
+te:'The ~te form connects actions and, with kudasai, makes requests. Regular I changes its ending sound (-tte, -nde, -ite, -shite); Regular II drops masu and adds te; kimasu → kite, shimasu → shite.',
+tek:'Verb ~te + kudasai is the polite imperative: “Please do ~.”',
+link:'Linking with ~te: when one action follows another, the first verb ends in ~te. Both clauses need the same subject, mood and tense.',
+gawa:'Ga marks a new subject (new information). Wa marks the topic once speaker and listener both know about it.',
+nai:'The ~nai form is the plain negative of a verb. Regular I: -i → -a + nai (u-verbs use wa). Regular II: drop masu + nai. Irregular: konai, shinai.',
+naide:'Verb ~nai + de + kudasai is a polite prohibition: “Please do not ~.”',
+grp:'Verb groups: Regular I (five-vowel), Regular II (single-vowel, i/e only) and Irregular (shimasu, kimasu). The vowel before ~nai shows the group: a → Regular I; i or e → Regular II.',
+be:'Arimasu and imasu both express “being / existing.” Arimasu is for things (buildings, trees, boxes); imasu is for people and animals.',
+pref:'Likes and preferences: Person wa noun ga suki desu (suki is a ~na adjective) means “likes”; noun ga ii desu means “prefers.” The thing liked is marked by ga.',
+tai:'The ~tai form expresses desire (“want to”). Take the ~masu stem and add tai; it then inflects like an ~i adjective (-takunai, -takatta, -takunakatta).'};
+const Q=`ia§Which of these is an ~i adjective?§oishii|kireina|shizukana|benrina§Check the ending: oishii ends in -i. The others end in -na, so they are ~na.
+ia§Present negative of “samui desu” (it’s cold)?§samukunai desu|samui dewa arimasen|samukatta desu|samuku desu§samui → drop -i → samu + kunai → samukunai desu.
+ia§Past affirmative of “oishii desu”?§oishikatta desu|oishikunai desu|oishii deshita|oishikunakatta desu§oishii → drop -i → oishi + katta → oishikatta desu.
+ia§Past negative of “ookii desu”?§ookikunakatta desu|ookikatta desu|ookikunai deshita|ookii dewa arimasendeshita§ookii → drop -i → ooki + kunakatta → ookikunakatta desu.
+na§Before desu, “sukina” becomes…§suki|sukina|sukii|sukikunai§sukina → drop na → suki → suki desu.
+na§Present negative of “heta desu”?§heta dewa arimasen|hetakunai desu|heta deshita|heta dewa arimasendeshita§heta (unchanged) + dewa arimasen → heta dewa arimasen.
+na§Past affirmative of “majime desu”?§majime deshita|majimekatta desu|majime dewa arimasen|majime desuta§majime (unchanged) + deshita → majime deshita.
+na§Past negative of “taihen desu”?§taihen dewa arimasendeshita|taihenkunakatta desu|taihen deshita|taihen dewa arimasen§taihen (unchanged) + dewa arimasen + deshita → taihen dewa arimasendeshita.
+ia§“Fuji-san wa takai desu” means…§Mt. Fuji is high.|Mt. Fuji is cold.|Mt. Fuji is quiet.|Mt. Fuji was high.§Fuji-san = Mt. Fuji; wa = topic; takai = high; desu = present → “Mt. Fuji is high.”
+ia§“Kino wa samukatta desu” means…§It was cold yesterday.|It is cold today.|It wasn’t cold yesterday.|It will be cold tomorrow.§kino = yesterday; samukatta = samu + katta (past of samui) → “It was cold yesterday.”
+na§Which is a ~na adjective?§kireina|atarashii|chiisai|omoshiroi§Kireina carries na, so it is ~na even though kirei ends in -i.
+na§“Kino no pati wa nigiyaka ___.” (Yesterday’s party was lively.)§deshita|desu|katta desu|dewa arimasen§Past + ~na adjective: nigiyaka (na dropped) + deshita.
+voc§Which word means “quiet”?§shizukana|nigiyakana|hiroi|semai§Match meanings: shizukana = quiet, nigiyakana = lively, hiroi = wide, semai = narrow.
+voc§Nigiyakana means…§lively|famous|polite|various§Match meanings: nigiyakana = lively, yuumeina = famous, teineina = polite, iroirona = various.
+ne§“Kireina kabin desu ne” means…§What a lovely vase!|The vase is broken.|I don’t like the vase.|Where is the vase?§kireina = lovely; kabin = vase; desu = is; ne = isn’t it → “What a lovely vase!”
+ne§The particle ne at the end of a sentence…§seeks agreement (“isn’t it?”)|marks the topic|marks the object|makes it past tense§Compare: wa = topic; no = “of / ’s”; ne = seeks agreement.
+mod§Before a noun, a ~na adjective…§keeps its na (shizukana resutoran)|drops its na|changes to -katta|changes to -kunai§Adjective + noun: shizuka + na + resutoran. Na is dropped only before desu/deshita.
+na§Which pair are both ~na adjectives?§kirei and kirai|kirei and oishii|samui and kirai|takai and kirei§Kirei and kirai end in -i but are ~na (kireina, kiraina). Oishii, samui and takai are ~i.
+voc§Karai means…§hot, spicy|sour|sweet|cold§Match meanings: karai = hot/spicy, suppai = sour, amai = sweet, samui = cold.
+voc§Which is the ~i adjective meaning “dangerous”?§abunai|kikenna|taisetsuna|iyana§Abunai ends in -i (~i). Kikenna also means dangerous but is ~na.
+te§Te form of kakimasu (write)§kaite|kaitte|kaide|kakite§kaki-masu: -ki → -ite → kaite.
+te§Te form of kaimasu (buy)§katte|kaite|kainde|kaide§kai-masu: -i → -tte → katte.
+te§Te form of yomimasu (read)§yonde|yomite|yomitte|yoite§yomi-masu: -mi → -nde → yonde.
+te§Te form of tabemasu (eat)§tabete|tabette|tabende|tabeite§Regular II: drop masu, add te → tabete.
+te§Te form of ikimasu (go)§itte|iite|inde|ikite§Exception: iki-masu would give iite, but it becomes itte.
+te§Te form of kimasu (come)§kite|kitte|kuite|kimete§Irregular: ki-masu → kite.
+te§Te form of shimasu (do)§shite|shimete|shitte|shide§Irregular: shi-masu → shite.
+te§Te form of machimasu (wait)§matte|machite|mande|maite§machi-masu: -chi → -tte → matte.
+te§Te form of oshimasu (push)§oshite|oshitte|oshinde|oshiite§oshi-masu: -shi → -shite → oshite.
+te§Te form of misemasu (show)§misete|misette|misende|misite§Regular II: drop masu, add te → misete.
+te§Te form of tsukaimasu (use)§tsukatte|tsukaite|tsukande|tsukaete§tsukai-masu: -i → -tte → tsukatte.
+te§Te form of nomimasu (drink)§nonde|nomite|nomitte|noite§nomi-masu: -mi → -nde → nonde.
+tek§“~te kudasai” means…§please do ~|please don’t ~|I want to ~|I can ~§Verb ~te + kudasai = polite request (mite kudasai = please look).
+tek§3-ji made ni uchi ni ___ kudasai. (Please deliver it.)§todokete|todokenai|todokemasu|todoke§todokemasu → drop masu → todoke + te → todokete kudasai.
+link§Kyouto to Nara ni ___, furui o-tera o mimasu.§itte|ikimasu|ikanai|ikitai§The first action takes ~te: ikimasu → itte, then the second action follows.
+link§Which pair cannot be joined with the ~te form?§a statement and a suggestion|two actions by the same subject|two present-tense actions|two past-tense actions§Rules: same subject, mood and tense. A statement and a suggestion differ in mood.
+gawa§Why does “Rinda-san ga kimashita” use ga?§Linda is new information|Linda is the object|It shows possession|It shows the place§First mention (new information) → ga. Once both people know her → wa.
+nai§Nai form of kakimasu§kakanai|kakenai|kakinai|kakuna§kaki-masu: -ki → -ka + nai → kakanai.
+nai§Nai form of kaimasu§kawanai|kaanai|kainai|kaenai§kai-masu: a u-verb uses wa → kawa + nai → kawanai.
+nai§Nai form of tabemasu§tabenai|tabanai|tabeanai|tabinai§Regular II: drop masu, add nai → tabenai.
+nai§Nai form of kimasu§konai|kinai|kenai|kanai§Irregular: ki-masu → konai.
+nai§Nai form of shimasu§shinai|sanai|shenai|shimenai§Irregular: shi-masu → shinai.
+naide§Koko de tabako o ___ kudasai. (Please don’t smoke here.)§suwanaide|suinaide|suimasende|sutte§suimasu → suwa + nai → suwanai + de + kudasai.
+grp§If the vowel before ~nai is “a”, the verb is…§Regular I|Regular II|Irregular|an adjective§Make the ~nai form, then look at the vowel before nai: a → Regular I; i or e → Regular II.
+grp§Which is a Regular II verb?§tabemasu|kakimasu|machimasu|kaerimasu§Tabenai has e before nai → Regular II. Kakanai, matanai and kaeranai have a → Regular I.
+be§Imasu is used for…§people and animals|buildings|trees|boxes§Ask: is it a person or animal? Yes → imasu. A thing → arimasu.
+be§Hako no naka ni kitte ga ___. (There are stamps in the box.)§arimasu|imasu|imashita|imasen§Stamps are things, present, affirmative → arimasu.
+be§Past negative of arimasu§arimasendeshita|arimashita|arimasen|imasendeshita§arimasu → arimasen (not) → + deshita (past) → arimasendeshita.
+pref§“Banana ga suki desu” means…§I like bananas.|I eat bananas.|I buy bananas.|I peel bananas.§Pattern: noun ga suki desu = likes noun; ga marks the thing liked.
+tai§“Ikitakunakatta desu” means…§(I) didn’t want to go.|(I) wanted to go.|(I) don’t want to go.|(I) want to go.§ikimasu → iki + tai → ikitai; → ikitakunai (don’t want) → ikitakunakatta (didn’t want).`.trim().split('\n');
+function b1(){const s=$('#p1');s.innerHTML='<h2>Multiple choice</h2><p class="ins">Pick an answer: the correct one is revealed right away, with the concept and the step-by-step operation.</p><button class="rs">Retake</button>';got[1].clear();tot[1]=Q.length;
+s.lastChild.onclick=b1;
+Q.forEach((l,i)=>{const[k,t,o,m]=l.split('§'),op=o.split('|'),d=document.createElement('div');d.className='card';d.innerHTML='<b>'+(i+1)+'.</b> '+t+'<div></div><div class="fb" hidden></div>';
+const box=d.children[1],fb=d.children[2];
+shuf(op.map((x,j)=>[x,j==0])).forEach(([x,c])=>{const b=document.createElement('button');b.className='opt';b.textContent=x;b.dataset.c=c?1:'';
+b.onclick=()=>{box.querySelectorAll('button').forEach(q=>{q.disabled=true;if(q.dataset.c)q.classList.add('ok')});if(!c)b.classList.add('no');else got[1].add(i);
+fb.hidden=false;fb.innerHTML='<b class="'+(c?'g':'b')+'">'+(c?'✓ Correct.':'✗ Not quite. The answer is “'+op[0]+'”.')+'</b><p class="cn"><b>Concept:</b> '+C[k]+'</p><p class="cn"><b>Operation:</b> '+m+'</p>';sc()};box.append(b)});s.append(d)});sc()}
+const A=[['oishii','i'],['atsui','i'],['chiisai','i'],['omoshiroi','i'],['muzukashii','i'],['yasui','i'],['kirei','na'],['shizuka','na'],['heta','na'],['nigiyaka','na'],['benri','na'],['taihen','na']],
+V=[['kaku','kaki'],['yomu','yomi'],['taberu','tabe'],['miru','mi'],['suru','shi'],['kuru','ki'],['matsu','machi'],['nomu','nomi'],['hanasu','hanashi'],['au','ai']],
+fa=(w,t)=>{const b=w.slice(0,-1);return t=='i'?[w+' desu',b+'kunai desu',b+'katta desu',b+'kunakatta desu']:[w+' desu',w+' dewa arimasen',w+' deshita',w+' dewa arimasen deshita']},
+fv=s=>[s+'masu',s+'masen',s+'mashita',s+'masendeshita'];
+function b2(){const s=$('#p2');got[2].clear();let n=0;const G=[['Adjectives (~i and ~na): type each form, including desu / dewa arimasen',A.map(([w,t])=>[w+' ('+t+')',fa(w,t)])],['Verbs: type the polite (~masu) forms',V.map(([d,x])=>[d,fv(x)])]];
+s.innerHTML='<h2>Identification</h2><p class="ins">Type an answer in a box, then press Enter or tap away: the correct answer is revealed right away and the box locks. “Reveal remaining” checks any boxes you skipped.</p>';
+G.forEach(([h,rows])=>{let t='<h2>'+h+'</h2><div class="w"><table><tr><th>Word</th><th>Present affirmative</th><th>Present negative</th><th>Past affirmative</th><th>Past negative</th></tr>';
+rows.forEach(([w,f])=>{t+='<tr><td><b>'+w+'</b></td>'+f.map(a=>'<td><input autocapitalize="off" autocomplete="off" spellcheck="false" data-a="'+a+'" data-i="'+(n++)+'"></td>').join('')+'</tr>'});
+s.insertAdjacentHTML('beforeend',t+'</table></div>')});tot[2]=n;
+s.insertAdjacentHTML('beforeend','<button class="go">Reveal remaining</button><button class="rs">Reset</button>');
+const chk=i=>{if(i.readOnly)return;const ok=norm(i.value)==norm(i.dataset.a);i.className=ok?'ok':'no';i.readOnly=true;got[2][ok?'add':'delete'](i.dataset.i);const p=i.parentNode;p.insertAdjacentHTML('beforeend',ok?'<small style="color:var(--ok)">✓ Correct</small>':'<small>✗ '+i.dataset.a+'</small>');sc()};
+s.querySelectorAll('input').forEach(i=>{i.onchange=()=>{if(i.value.trim())chk(i)};i.onkeydown=e=>{if(e.key=='Enter')i.blur()}});
+s.querySelector('.go').onclick=()=>s.querySelectorAll('input').forEach(chk);
+s.querySelector('.rs').onclick=b2;sc()}
+const F=`#Verb Forms - QUIZ|Make the verb structures according to the required forms.
+Masu - Present affirmative - Hanasu~Hanashimasu (話します)
+Te - Hanasu~Hanashite (話して)
+Nai - Hanasu~Hanasanai (話さない)
+Tai Form - Present Affirmative - Hanasu~Hanashitai (話したい)
+Masu Form - Past Affirmative - Hanasu~Hanashimashita (話しました)
+Tai Form - Past Affirmative - Hanasu~Hanashitakatta (話したかった)
+#I-adjective Quiz|Write the adjective words following the required conjugation of the given adjective
+Chiisai (past affirmative)~Chiisakatta desu
+Atarashii (present negative)~Atarashikunai desu
+Atsui (past negative)~Atsukunakatta desu
+Omoshiroi (past negative)~Omoshirokunakatta desu
+Karai (present affirmative)~Karai desu
+#Na- adjective Quiz|Please complete the sentences with the appropriate na~adjective. Take note of the words and phrases in parentheses.
+Watashi no machi wa __________ . (quiet – shizuka - present affirmative)~shizuka desu
+Tanaka-san wa __________ hito _______. (kind – shinsetsu - present affirmative)~shinsetsuna;desu
+Kono heya wa __________ . (clean – kirei - present negative)~kirei dewa arimasen|kirei ja arimasen
+Watashi no sensei wa __________ . (strict – kibishii -  present negative)~kibishikunai desu~Note: kibishii is an ~i adjective, so it takes -kunai.
+Kinou no tesuto wa __________ . (easy – kantan - past affirmative)~kantan deshita
+Kinou no party wa __________ . (lively – nigiyaka - past affirmative)~nigiyaka deshita
+Kinou no heya wa __________ . (clean – kirei - past negative)~kirei dewa arimasendeshita|kirei ja arimasendeshita
+Ano hotel wa __________ . (quiet – shizuka - past negative)~shizuka dewa arimasendeshita|shizuka ja arimasendeshita
+Tokyo wa __________ machi ______. (famous – yuumei - present affirmative)~yuumeina;desu
+Kono mise wa __________ . (convenient – benri - present affirmative)~benri desu`.split('\n'),
+ex=x=>{const m=x.match(/^(.*?)\s*\((.*)\)$/);return m?[x,m[1],m[2]]:[x]};
+function b3(){const s=$('#p3');got[3].clear();tot[3]=F.filter(l=>l[0]!='#').length;s.innerHTML='<h2>Final Quiz (additional)</h2><p class="ins">Type your answer in each item and press Check (or Enter).</p><button class="rs">Reset</button>';s.lastChild.onclick=b3;let k=0;
+F.forEach(l=>{if(l[0]=='#'){const[h,i]=l.slice(1).split('|');s.insertAdjacentHTML('beforeend','<h2>'+h+'</h2><p class="ins">'+i+'</p>');return}
+const id=k++,[t,a,note]=l.split('~'),parts=a.split(';'),d=document.createElement('div');d.className='card';
+let h=t.replace(/_{3,}/g,'<input autocapitalize="off" autocomplete="off" spellcheck="false">');if(h==t)h+='<br><input autocapitalize="off" autocomplete="off" spellcheck="false">';
+d.innerHTML='<div>'+h+'</div><button class="go">Check</button><div class="fb" hidden></div>';
+const ins=d.querySelectorAll('input'),fb=d.querySelector('.fb'),go=d.querySelector('.go');
+ins.forEach(i=>i.onkeydown=e=>{if(e.key=='Enter')go.click()});
+go.onclick=()=>{let all=true;ins.forEach((i,j)=>{const ok=parts[j].split('|').flatMap(ex).map(norm).includes(norm(i.value));i.className=ok?'ok':'no';if(!ok)all=false});
+got[3][all?'add':'delete'](id);fb.hidden=false;fb.className='fb '+(all?'g':'b');fb.textContent=(all?'✓ Correct: ':'✗ Answer: ')+parts.map(p=>p.split('|')[0]).join(' … ')+(note?'  ('+note+')':'');sc()};s.append(d)});sc()}
+const R=`#I-adjectives (~i)|Drop the final -i and add -kunai (not), -katta (was) or -kunakatta (was not), then desu.
+Chiisai (small)~Kono heya wa chiisai desu.|This room is small.~Kono heya wa chiisakunai desu.|This room is not small.~Ano uchi wa chiisakatta desu.|That house was small.~Ano uchi wa chiisakunakatta desu.|That house was not small.
+Atarashii (new)~Kono kuruma wa atarashii desu.|This car is new.~Kono kuruma wa atarashikunai desu.|This car is not new.~Watashi no kaban wa atarashikatta desu.|My bag was new.~Watashi no kaban wa atarashikunakatta desu.|My bag was not new.
+Atsui (hot)~Kyou wa atsui desu.|Today is hot.~Kyou wa atsukunai desu.|Today is not hot.~Kinou wa atsukatta desu.|Yesterday was hot.~Kinou wa atsukunakatta desu.|Yesterday was not hot.
+Omoshiroi (interesting)~Kono hon wa omoshiroi desu.|This book is interesting.~Kono hon wa omoshirokunai desu.|This book is not interesting.~Kinou no eiga wa omoshirokatta desu.|Yesterday’s movie was interesting.~Kinou no eiga wa omoshirokunakatta desu.|Yesterday’s movie was not interesting.
+Karai (spicy)~Kono karee wa karai desu.|This curry is spicy.~Kono karee wa karakunai desu.|This curry is not spicy.~Kinou no ramen wa karakatta desu.|Yesterday’s ramen was spicy.~Kinou no ramen wa karakunakatta desu.|Yesterday’s ramen was not spicy.
+Kibishii (strict)~Watashi no sensei wa kibishii desu.|My teacher is strict.~Watashi no sensei wa kibishikunai desu.|My teacher is not strict.~Mukashi no sensei wa kibishikatta desu.|My old teacher was strict.~Mukashi no sensei wa kibishikunakatta desu.|My old teacher was not strict.
+#Na-adjectives (~na)|Drop the na before desu. Use dewa arimasen (not), deshita (was) and dewa arimasendeshita (was not).
+Shizuka (quiet)~Watashi no machi wa shizuka desu.|My town is quiet.~Watashi no machi wa shizuka dewa arimasen.|My town is not quiet.~Ano hotel wa shizuka deshita.|That hotel was quiet.~Ano hotel wa shizuka dewa arimasendeshita.|That hotel was not quiet.
+Shinsetsu (kind)~Tanaka-san wa shinsetsuna hito desu.|Mr. Tanaka is a kind person.~Tanaka-san wa shinsetsu dewa arimasen.|Mr. Tanaka is not kind.~Sensei wa shinsetsu deshita.|The teacher was kind.~Sensei wa shinsetsu dewa arimasendeshita.|The teacher was not kind.
+Kirei (clean, pretty)~Kono heya wa kirei desu.|This room is clean.~Kono heya wa kirei dewa arimasen.|This room is not clean.~Kinou no heya wa kirei deshita.|Yesterday’s room was clean.~Kinou no heya wa kirei dewa arimasendeshita.|Yesterday’s room was not clean.
+Kantan (easy)~Kono tesuto wa kantan desu.|This test is easy.~Kono tesuto wa kantan dewa arimasen.|This test is not easy.~Kinou no tesuto wa kantan deshita.|Yesterday’s test was easy.~Kinou no tesuto wa kantan dewa arimasendeshita.|Yesterday’s test was not easy.
+Nigiyaka (lively)~Kono machi wa nigiyaka desu.|This town is lively.~Kono machi wa nigiyaka dewa arimasen.|This town is not lively.~Kinou no party wa nigiyaka deshita.|Yesterday’s party was lively.~Kinou no party wa nigiyaka dewa arimasendeshita.|Yesterday’s party was not lively.
+Yuumei (famous)~Tokyo wa yuumeina machi desu.|Tokyo is a famous city.~Kono mise wa yuumei dewa arimasen.|This shop is not famous.~Ano resutoran wa yuumei deshita.|That restaurant was famous.~Ano resutoran wa yuumei dewa arimasendeshita.|That restaurant was not famous.
+Benri (convenient)~Kono mise wa benri desu.|This shop is convenient.~Kono mise wa benri dewa arimasen.|This shop is not convenient.~Kono basu wa benri deshita.|This bus was convenient.~Kono basu wa benri dewa arimasendeshita.|This bus was not convenient.
+#Verb (~masu forms)|Present: ~masu / ~masen. Past: ~mashita / ~masendeshita.
+Hanasu (to speak, to talk)~Watashi wa tomodachi to hanashimasu.|I talk with my friend.~Watashi wa tomodachi to hanashimasen.|I don’t talk with my friend.~Kinou sensei to hanashimashita.|I talked with my teacher yesterday.~Kinou sensei to hanashimasendeshita.|I didn’t talk with my teacher yesterday.
++Hanasu: other forms from the Final Quiz~Yukkuri hanashite kudasai.|Please speak slowly.~Koko de hanasanaide kudasai.|Please don’t talk here.~Tanaka-san to hanashitai desu.|I want to talk with Mr. Tanaka.~Tanaka-san to hanashitakatta desu.|I wanted to talk with Mr. Tanaka.`.split('\n'),
+L=['Present affirmative','Present negative','Past affirmative','Past negative'],L2=['~te form + kudasai','~nai form + de kudasai','~tai (present)','~tai (past)'];
+function b4(){const s=$('#p4');s.innerHTML='<h2>Reviewer: sample sentences</h2><p class="ins">Study notes, not a quiz. Every word from the Final Quiz file is used in all four forms, with romaji and English.</p>';
+R.forEach(l=>{if(l[0]=='#'){const[h,i]=l.slice(1).split('|');s.insertAdjacentHTML('beforeend','<h2>'+h+'</h2><p class="ins">'+i+'</p>');return}
+const[h,...x]=l.split('~'),Z=h[0]=='+'?L2:L,d=document.createElement('div');d.className='card';
+d.innerHTML='<b>'+h.replace(/^\+/,'')+'</b>'+x.map((p,i)=>{const[r,e]=p.split('|');return '<p class="rv"><small>'+Z[i]+'</small><br><b>'+r+'</b><br><span>'+e+'</span></p>'}).join('');s.append(d)})}
+b1();b2();b3();b4();show(1);
+</script></body></html>
